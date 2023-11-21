@@ -1,10 +1,8 @@
 package com.example.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,9 +22,18 @@ public class Request extends BaseEntity {
 
     private Date timeToStart;
 
+    private Double initialPrice;
+
     @ManyToOne
     private User user;
 
     @ManyToOne
     private Currency currency;
+
+    @PrePersist
+    public void setInitialPrice() {
+        if (this.currency != null && this.initialPrice == null) {
+            this.initialPrice = this.currency.getPrice();
+        }
+    }
 }

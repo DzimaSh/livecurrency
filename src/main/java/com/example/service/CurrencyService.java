@@ -1,23 +1,26 @@
 package com.example.service;
 
 import com.example.entity.Currency;
-import com.example.exception.ParseException;
 import com.example.feign.CurrencyCheckFeignClient;
 import com.example.repository.CurrencyRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CurrencyService {
     private final CurrencyCheckFeignClient currencyCheckClient;
     private final CurrencyRepository repository;
     private final ParserService parserService;
-    private final MessageService messageService;
 
     @Transactional
     public Currency updatePrice(String currSymbol) {
@@ -32,5 +35,31 @@ public class CurrencyService {
         } else {
             return repository.save(fetchedCurrency);
         }
+    }
+
+    @Transactional
+    @Scheduled(fixedDelayString = "${telegram.bot.update_delay_in_ms}")
+    public void refreshCurrenciesState() {
+        int[] counter = { 0 };
+        List<Currency> updatedCurrencyList = parserService
+                .parseCryptoList(currencyCheckClient.getCryptoList());
+
+        updatedCurrencyList.forEach(updatedCurrency -> {
+            Optional<Currency> existingCurrency = repository
+                    .findBySymbol(updatedCurrency.getSymbol());
+
+            existingCurrency.ifPresentOrElse(
+                    currency -> {
+                        currency.setPrice(updatedCurrency.getPrice());
+                        repository.save(currency);
+                        counter[0]++;
+                    },
+                    () -> repository.save(updatedCurrency)
+            );
+        });
+
+        log.info(String.format("Updated %d entities. Saved %d entities",
+                counter[0], (updatedCurrencyList.size() - counter[0]))
+        );
     }
 }

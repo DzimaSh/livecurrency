@@ -3,6 +3,7 @@ telegram:
     token: ${BOT_TOKEN:xxx}
     username: ${BOT_USERNAME:livecurrency}
     max_users: ${MAX_USERS:1}
+    update_delay_in_ms: ${UPDATE_DELAY:10000}
 
 crypto:
   url: ${CRYPTO_URL:https://api.mexc.com/api/v3/ticker/price}
@@ -32,4 +33,4 @@ spring:
     show-sql: false
 logging:
   level:
-    org.hibernate.SQL: debug
+    org.hibernate.SQL: info
