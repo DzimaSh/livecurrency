@@ -1,8 +1,8 @@
 telegram:
   bot:
     token: ${BOT_TOKEN:xxx}
-    max_users: ${MAX_USERS:1}
     username: ${BOT_USERNAME:livecurrency}
+    max_users: ${MAX_USERS:1}
 
 crypto:
   url: ${CRYPTO_URL:https://api.mexc.com/api/v3/ticker/price}
@@ -14,22 +14,22 @@ spring:
   application:
     name: livecurrency
 
-#  datasource:
-#    url: ${DB_URL}
-#    username: ${DB_USER_USERNAME}
-#    password: ${DB_USER_PASSWORD}
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: validate
-#
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQL81Dialect
-#
-#      format_sql: true
-#
-#    show-sql: false
-#logging:
-#  level:
-#    org.hibernate.SQL: debug
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USER_USERNAME:postgres}
+    password: ${DB_USER_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL81Dialect
+
+      format_sql: true
+
+    show-sql: false
+logging:
+  level:
+    org.hibernate.SQL: debug
