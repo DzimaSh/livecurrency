@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @RequiredArgsConstructor
 public class MessageService {
 
-    // private final AbsSender absSender;
+    private final AbsSender absSender;
 
 //    public void handleMessage() {
 //
