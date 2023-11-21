@@ -6,7 +6,7 @@ import com.example.command.SettingsCommand;
 import com.example.command.StartCommand;
 import com.example.entity.User;
 import com.example.exception.UnhandledCommandException;
-import com.example.service.UserService;
+import com.example.util.TgUserToLiveUserMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -34,16 +34,18 @@ public class CommandHandler implements Handler {
     }
 
     @Override
-    public void handle(AbsSender sender, Update update) throws UnhandledCommandException {
-        CommandDetails command = retrieveCommandFromUpdate(update);
+    public void handle(AbsSender sender, Message message) throws UnhandledCommandException {
+        CommandDetails command = retrieveCommandFromUpdate(message);
         switch (command) {
-            case START -> new StartCommand().execute(sender, new User());
-            case SETTINGS -> new SettingsCommand().execute(sender, new User());
+            case START -> commands.get(CommandDetails.START)
+                    .execute(sender, TgUserToLiveUserMapper.mapToLiveUser(message.getFrom(), message.getChat()));
+
+            case SETTINGS -> commands.get(CommandDetails.SETTINGS)
+                    .execute(sender, TgUserToLiveUserMapper.mapToLiveUser(message.getFrom(), message.getChat()));
         }
     }
 
-    private CommandDetails retrieveCommandFromUpdate(Update update) throws UnhandledCommandException {
-        Message message = update.getMessage();
+    private CommandDetails retrieveCommandFromUpdate(Message message) throws UnhandledCommandException {
         try {
             return Command.getByIdentifier(message.getText());
         } catch (IllegalArgumentException ex) {

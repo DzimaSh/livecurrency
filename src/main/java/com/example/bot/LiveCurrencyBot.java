@@ -37,7 +37,7 @@ public class LiveCurrencyBot extends TelegramLongPollingBot {
 
         if (update.getMessage().getText().startsWith(Constants.COMMAND_PREFIX)) {
             try {
-                handlerList.get(Constants.COMMAND_KEY).handle(this, update);
+                handlerList.get(Constants.COMMAND_KEY).handle(this, update.getMessage());
             } catch (UnhandledException e) {
                 log.error(e.getMessage());
             }
