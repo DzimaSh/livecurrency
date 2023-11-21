@@ -28,4 +28,9 @@ public class User {
     private List<Request> requests;
     private Long chatId;
     private Long permissions;
+
+    public String prepareUserName() {
+        return (this.getUserName() != null) ? this.getUserName() :
+                String.format("%s %s", this.getLastName(), this.getFirstName());
+    }
 }

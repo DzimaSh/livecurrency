@@ -1,10 +1,13 @@
 package com.example.service;
 
+import com.example.entity.User;
+import com.example.repository.UserRepository;
 import com.example.util.Constants;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -15,11 +18,16 @@ public class UserService {
 
     private final Constants constants;
     private final AtomicLong userCounter = new AtomicLong();
+    private final UserRepository userRepository;
 
     @PostConstruct
     private void init() {
         userCounter.lazySet(constants.getMaxUsers());
     }
 
-    public void registerUser() {}
+    @Transactional
+    public void registerUser(User user) {
+        userRepository.save(user);
+
+    }
 }

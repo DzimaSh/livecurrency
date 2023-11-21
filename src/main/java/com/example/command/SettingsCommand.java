@@ -1,23 +1,18 @@
 package com.example.command;
 
 import com.example.entity.User;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+import static com.example.command.CommandEnum.SETTINGS;
+
 public class SettingsCommand extends Command {
-
-    private final static String command = "/settings";
-    private final static String description = "Settings";
-
     public SettingsCommand() {
-        super(command, description);
+        super(SETTINGS.getCommandIdentifier(), SETTINGS.getCommandDescription());
     }
 
-    public void execute(AbsSender absSender, User user, Chat chat) {
-        String userName = (user.getUserName() != null) ? user.getUserName() :
-                String.format("%s %s", user.getLastName(), user.getFirstName());
-
-        sendAnswer(absSender, chat.getId(), command, userName, buildMessage(user));
+    @Override
+    public void execute(AbsSender sender, User user) {
+        sendAnswer(sender, user, buildMessage(user));
     }
 
     private String buildMessage(User user) {
