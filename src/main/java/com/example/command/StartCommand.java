@@ -1,8 +1,8 @@
 package com.example.command;
 
 import com.example.entity.User;
+import com.example.exception.MaximumUsersReachedException;
 import com.example.exception.UserNotFoundException;
-import com.example.service.MessageService;
 import com.example.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,9 +25,14 @@ public class StartCommand extends Command {
     public void execute(AbsSender sender, User user) {
         boolean isCreated = false;
         try {
-            userService.getUserByUsername(user.getUserName());
+            user = userService.getUserByUsername(user.getUserName());
         } catch (UserNotFoundException ex) {
-            userService.registerUser(user);
+            try {
+                user = userService.registerUser(user);
+            } catch (MaximumUsersReachedException e) {
+                sendAnswer(sender, user, buildErrorMessage());
+                return;
+            }
             isCreated = true;
         }
         sendAnswer(sender, user, buildMessage(isCreated));
@@ -36,5 +41,9 @@ public class StartCommand extends Command {
     private String buildMessage(Boolean isCreated) {
         return (isCreated ?
                 "Successfully registered to our service! " : "You're already registered! ") + "Ready to Work!";
+    }
+
+    private String buildErrorMessage() {
+        return "Unfortunately, you cannot be registered. Apologize for that!";
     }
 }
