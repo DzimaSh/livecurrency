@@ -7,16 +7,10 @@ import java.util.Locale;
 
 @RequiredArgsConstructor
 @Getter
-public enum CommandEnum {
+public enum CommandDetails {
     SETTINGS("/settings", "Settings"),
     START("/start", "Start");
 
     private final String commandIdentifier;
     private final String commandDescription;
-
-    public static CommandEnum getByIdentifier(String identifier) {
-        return CommandEnum.valueOf(identifier
-                .toUpperCase(Locale.ROOT)
-                .replace("/", ""));
-    }
 }

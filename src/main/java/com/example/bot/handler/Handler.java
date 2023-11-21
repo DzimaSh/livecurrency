@@ -1,4 +1,4 @@
-package com.example.bot;
+package com.example.bot.handler;
 
 import com.example.exception.UnhandledException;
 import org.telegram.telegrambots.meta.api.objects.Update;

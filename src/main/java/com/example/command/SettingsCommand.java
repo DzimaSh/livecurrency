@@ -1,10 +1,12 @@
 package com.example.command;
 
 import com.example.entity.User;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
-import static com.example.command.CommandEnum.SETTINGS;
+import static com.example.command.CommandDetails.SETTINGS;
 
+@Component
 public class SettingsCommand extends Command {
     public SettingsCommand() {
         super(SETTINGS.getCommandIdentifier(), SETTINGS.getCommandDescription());

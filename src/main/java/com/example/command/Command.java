@@ -1,11 +1,14 @@
 package com.example.command;
 
 import com.example.entity.User;
+import com.example.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.Locale;
 
 @Slf4j
 public abstract class Command extends BotCommand {
@@ -27,6 +30,12 @@ public abstract class Command extends BotCommand {
         } catch (TelegramApiException e) {
             log.error(e.getLocalizedMessage());
         }
+    }
+
+    public static CommandDetails getByIdentifier(String identifier) {
+        return CommandDetails.valueOf(identifier
+                .toUpperCase(Locale.ROOT)
+                .replace(Constants.COMMAND_PREFIX, ""));
     }
 
    public abstract void execute(AbsSender sender, User user);

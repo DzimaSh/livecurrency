@@ -18,4 +18,7 @@ public class Constants {
 
     @Value("${telegram.bot.username}")
     private String botUsername;
+
+    public static final String COMMAND_KEY = "command";
+    public static final String COMMAND_PREFIX = "/";
 }
