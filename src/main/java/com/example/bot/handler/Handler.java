@@ -6,5 +6,5 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 
 @FunctionalInterface
 public interface Handler {
-    void handle(AbsSender sender, Message update) throws UnhandledException;
+    void handle(AbsSender sender, Message message) throws UnhandledException;
 }

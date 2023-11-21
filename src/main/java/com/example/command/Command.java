@@ -33,9 +33,13 @@ public abstract class Command extends BotCommand {
     }
 
     public static CommandDetails getByIdentifier(String identifier) {
-        return CommandDetails.valueOf(identifier
-                .toUpperCase(Locale.ROOT)
-                .replace(Constants.COMMAND_PREFIX, ""));
+        String[] options = identifier.split(" ");
+        if (options.length > 0) {
+            return CommandDetails.valueOf(options[0]
+                    .toUpperCase(Locale.ROOT)
+                    .replace(Constants.COMMAND_PREFIX, ""));
+        }
+        return null;
     }
 
    public abstract void execute(AbsSender sender, User user);

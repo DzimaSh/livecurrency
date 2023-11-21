@@ -30,9 +30,11 @@ public class StartCommand extends Command {
             try {
                 user = userService.registerUser(user);
             } catch (MaximumUsersReachedException e) {
+                log.info("Forbid to create user");
                 sendAnswer(sender, user, buildErrorMessage());
                 return;
             }
+            log.info("User is created");
             isCreated = true;
         }
         sendAnswer(sender, user, buildMessage(isCreated));
