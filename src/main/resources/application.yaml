@@ -1,6 +1,10 @@
 telegram:
   bot:
     token: ${BOT_TOKEN}
+    max_users: ${MAX_USERS}
+
+crypto:
+  url: https://api.mexc.com/api/v3/ticker/price
 
 spring:
   application:
@@ -21,7 +25,7 @@ spring:
 
       format_sql: true
 
-    show-sql: true
+    show-sql: false
 logging:
   level:
     org.hibernate.SQL: debug
