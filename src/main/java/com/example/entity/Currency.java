@@ -29,5 +29,5 @@ public class Currency extends BaseEntity {
 
     @OneToMany(mappedBy = "currency")
     @LazyCollection(value = LazyCollectionOption.TRUE)
-    private List<Request> request;
+    private List<Request> requests;
 }
