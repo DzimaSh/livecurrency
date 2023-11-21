@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entity.Currency;
+import com.example.exception.NotFoundException;
 import com.example.feign.CurrencyCheckFeignClient;
 import com.example.repository.CurrencyRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,11 @@ public class CurrencyService {
         } else {
             return repository.save(fetchedCurrency);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Currency getBySymbol(String symbol) {
+        return repository.findBySymbol(symbol)
+                .orElseThrow(() -> new NotFoundException("Currency " + symbol + " not found!"));
     }
 }
