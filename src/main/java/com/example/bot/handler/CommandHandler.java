@@ -5,6 +5,7 @@ import com.example.command.Command;
 import com.example.command.CommandDetails;
 import com.example.command.SettingsCommand;
 import com.example.command.StartCommand;
+import com.example.command.SubscribeCurrencyCommand;
 import com.example.entity.User;
 import com.example.exception.UnhandledCommandException;
 import com.example.util.TelegramUtil;
@@ -24,10 +25,11 @@ public class CommandHandler implements Handler {
     private final HashMap<CommandDetails, Command> commands = new HashMap<>();
 
     public CommandHandler(StartCommand startCommand, SettingsCommand settingsCommand,
-                          CheckCurrencyCommand checkCurrencyCommand) {
+                          CheckCurrencyCommand checkCurrencyCommand, SubscribeCurrencyCommand subscribeCurrencyCommand) {
         commands.put(CommandDetails.START, startCommand);
         commands.put(CommandDetails.SETTINGS, settingsCommand);
         commands.put(CommandDetails.CHECK_CURRENCY, checkCurrencyCommand);
+        commands.put(CommandDetails.SUBSCRIBE_CURRENCY, subscribeCurrencyCommand);
     }
 
     @PostConstruct

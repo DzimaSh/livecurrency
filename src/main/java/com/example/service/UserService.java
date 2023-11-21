@@ -44,6 +44,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public boolean checkIfUserExists(String username) {
+        return userRepository.existsByUserName(username);
+    }
+
+    @Transactional(readOnly = true)
     public long getUsersAmount() {
         return userRepository.count();
     }
