@@ -3,6 +3,7 @@ package com.example;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @SpringBootApplication
 @EnableFeignClients
 @Slf4j
+@ConfigurationPropertiesScan("com.example")
 public class LiveCurrencyApplication {
 
     public static void main(String[] args) {

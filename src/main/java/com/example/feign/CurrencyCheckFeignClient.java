@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(url = "${crypto.url}")
+@FeignClient(name = "currencyCheckFeign", url = "${crypto.url}")
 public interface CurrencyCheckFeignClient {
     @GetMapping
     List<Currency> getCryptoList();

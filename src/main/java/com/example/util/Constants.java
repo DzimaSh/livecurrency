@@ -1,20 +1,27 @@
 package com.example.util;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @Getter
-@RequiredArgsConstructor
+@Slf4j
 public class Constants {
 
     @Value("${telegram.bot.token}")
-    private final String botToken;
+    private String botToken;
 
     @Value("${telegram.bot.max_users}")
-    private final Long maxUsers;
+    private Long maxUsers;
 
-    private final String botUsername;
+    @Value("${telegram.bot.username}")
+    private String botUsername;
+
+    @PostConstruct
+    private void postConstruct() {
+        log.info("Constants initialized" + this.getBotToken());
+    }
 }

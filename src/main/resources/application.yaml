@@ -1,7 +1,8 @@
 telegram:
   bot:
-    token: ${BOT_TOKEN}
-    max_users: ${MAX_USERS}
+    token: ${BOT_TOKEN:xxx}
+    max_users: ${MAX_USERS:1}
+    username: ${BOT_USERNAME:livecurrency}
 
 crypto:
   url: https://api.mexc.com/api/v3/ticker/price
