@@ -2,7 +2,7 @@ package com.example.command;
 
 import com.example.entity.User;
 import com.example.exception.MaximumUsersReachedException;
-import com.example.exception.UserNotFoundException;
+import com.example.exception.NotFoundException;
 import com.example.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class StartCommand extends Command {
         boolean isCreated = false;
         try {
             user = userService.getUserByUsername(user.getUserName());
-        } catch (UserNotFoundException ex) {
+        } catch (NotFoundException ex) {
             try {
                 user = userService.registerUser(user);
             } catch (MaximumUsersReachedException e) {

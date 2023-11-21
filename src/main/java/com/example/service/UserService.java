@@ -2,7 +2,7 @@ package com.example.service;
 
 import com.example.entity.User;
 import com.example.exception.MaximumUsersReachedException;
-import com.example.exception.UserNotFoundException;
+import com.example.exception.NotFoundException;
 import com.example.repository.UserRepository;
 import com.example.util.Constants;
 import jakarta.annotation.PostConstruct;
@@ -40,7 +40,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
         return userRepository.findByUserName(username)
-                .orElseThrow(() -> new UserNotFoundException("There's no username " + username + "registered"));
+                .orElseThrow(() -> new NotFoundException("There's no username " + username + "registered"));
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkIfUserExists(String username) {
+        return userRepository.existsByUserName(username);
     }
 
     @Transactional(readOnly = true)

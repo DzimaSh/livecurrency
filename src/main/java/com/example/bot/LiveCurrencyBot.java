@@ -3,6 +3,7 @@ package com.example.bot;
 import com.example.bot.handler.CommandHandler;
 import com.example.bot.handler.Handler;
 import com.example.bot.handler.GetCurrencyPriceHandler;
+import com.example.bot.handler.SubscribeCurrencyHandler;
 import com.example.command.CommandDetails;
 import com.example.exception.UnhandledException;
 import com.example.util.Constants;
@@ -28,12 +29,14 @@ public class LiveCurrencyBot extends TelegramLongPollingBot {
     private final Map<Long, Status> chatStatus = new ConcurrentHashMap<>();
 
     public LiveCurrencyBot(Constants constants,
-                           CommandHandler commandHandler, GetCurrencyPriceHandler messageHandler) {
+                           CommandHandler commandHandler, GetCurrencyPriceHandler currencyPriceHandler,
+                           SubscribeCurrencyHandler subscribeCurrencyHandler) {
         super(constants.getBotToken());
         this.constants = constants;
 
         handlerList.put(Constants.COMMAND_KEY, commandHandler);
-        handlerList.put(Constants.MESSAGE_KEY, messageHandler);
+        handlerList.put(Constants.CURRENCY_PRICE_MESSAGE_KEY, currencyPriceHandler);
+        handlerList.put(Constants.CURRENCY_SUBSCRIBE_MESSAGE_KEY, subscribeCurrencyHandler);
     }
 
 
@@ -55,14 +58,17 @@ public class LiveCurrencyBot extends TelegramLongPollingBot {
 
             if (update.getMessage().getText().startsWith(Constants.COMMAND_PREFIX)) {
                 CommandDetails command = TelegramUtil.getCommandByIdentifier(update.getMessage().getText());
-                switch (command) {
+                switch (Objects.requireNonNull(command)) {
                     case CHECK_CURRENCY -> chatStatus.put(chatId, Status.WAIT_FOR_CURRENCY_SYMBOL);
+                    case SUBSCRIBE_CURRENCY -> chatStatus.put(chatId, Status.WAIT_FOR_CURRENCY_SUBSCRIBE);
                 }
                 handlerList.get(Constants.COMMAND_KEY).handle(this, update.getMessage());
 
                 return;
             } else if (chatStatus.get(chatId).equals(Status.WAIT_FOR_CURRENCY_SYMBOL)) {
-                handlerList.get(Constants.MESSAGE_KEY).handle(this, update.getMessage());
+                handlerList.get(Constants.CURRENCY_PRICE_MESSAGE_KEY).handle(this, update.getMessage());
+            } else if (chatStatus.get(chatId).equals(Status.WAIT_FOR_CURRENCY_SUBSCRIBE)) {
+                handlerList.get(Constants.CURRENCY_SUBSCRIBE_MESSAGE_KEY).handle(this, update.getMessage());
             } else {
                 this.execute(TelegramUtil
                         .buildMessage("Unsupported request! Try `/help` for further info", chatId));
@@ -80,6 +86,7 @@ public class LiveCurrencyBot extends TelegramLongPollingBot {
     private enum Status {
         WAIT_FOR_COMMAND,
         WAIT_FOR_CURRENCY_SYMBOL,
+        WAIT_FOR_CURRENCY_SUBSCRIBE,
         WAIT_FOR_SETTINGS
     }
 }

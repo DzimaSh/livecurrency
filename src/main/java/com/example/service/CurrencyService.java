@@ -1,16 +1,18 @@
 package com.example.service;
 
 import com.example.entity.Currency;
+import com.example.exception.NotFoundException;
 import com.example.feign.CurrencyCheckFeignClient;
 import com.example.repository.CurrencyRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CurrencyService {
@@ -20,7 +22,8 @@ public class CurrencyService {
 
     @Transactional
     public Currency updatePrice(String currSymbol) {
-        Currency fetchedCurrency = currencyCheckClient.getCryptoItem(currSymbol);
+        Currency fetchedCurrency = parserService
+                    .parseCryptoItem(currencyCheckClient.getCryptoItem(currSymbol));
         Optional<Currency> existingCurrency = repository.findBySymbol(currSymbol);
 
         if (existingCurrency.isPresent() && !Objects.isNull(fetchedCurrency)) {
@@ -30,5 +33,15 @@ public class CurrencyService {
         } else {
             return repository.save(fetchedCurrency);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Currency getBySymbol(String symbol) {
+        return getOrFetch(symbol)
+                .orElseThrow(() -> new NotFoundException("Currency " + symbol + " not found!"));
+    }
+
+    private Optional<Currency> getOrFetch(String symbol) {
+        return repository.findBySymbol(symbol);
     }
 }

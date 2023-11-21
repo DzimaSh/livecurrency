@@ -38,7 +38,7 @@ public class GetCurrencyPriceHandler implements Handler {
                 .buildMessage(String.format(
                             """
                             Symbol: %s
-                            Price: %.10f
+                            Price: %.20f
                             TimeStamp: %s
                             """, currency.getSymbol(), currency.getPrice(), currency.getCreationDate()),
                         message.getChatId()));

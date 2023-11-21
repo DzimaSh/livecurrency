@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.List;
 
@@ -25,5 +28,7 @@ public class Currency extends BaseEntity {
     private Double price;
 
     @OneToMany(mappedBy = "currency")
-    private List<Request> request;
+    @LazyCollection(value = LazyCollectionOption.TRUE)
+    @ToString.Exclude
+    private List<Request> requests;
 }

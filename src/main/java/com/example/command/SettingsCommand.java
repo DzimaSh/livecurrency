@@ -1,6 +1,8 @@
 package com.example.command;
 
 import com.example.entity.User;
+import com.example.exception.NotFoundException;
+import com.example.service.UserService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
@@ -10,13 +12,22 @@ import static com.example.command.CommandDetails.SETTINGS;
 
 @Component
 public class SettingsCommand extends Command {
-    public SettingsCommand() {
+
+    private final UserService userService;
+
+    public SettingsCommand(UserService userService) {
         super(SETTINGS.getCommandIdentifier(), SETTINGS.getCommandDescription());
+        this.userService = userService;
     }
 
     @Override
     public void execute(AbsSender sender, User user) {
-        sendAnswer(sender, user, buildMessage(user));
+        try {
+            User liveUser = userService.getUserByUsername(user.getUserName());
+            sendAnswer(sender, user, buildMessage(liveUser));
+        } catch (NotFoundException ex) {
+            sendAnswer(sender, user, "Unauthorized! Try to execute `/start`...");
+        }
     }
 
     private String buildMessage(User user) {
@@ -28,10 +39,9 @@ public class SettingsCommand extends Command {
                                             """
                                                 Currency: %s
                                                 Percentage changed to notify: %.2f
-                                                Start time: %s
                                         
                                             """,
-                                        request.getCurrency(), request.getPercents(), request.getTimeToStart().getTime()
+                                        request.getCurrency(), request.getPercents()
                                 ));
                     }));
             message.append("You can adjust them!");
