@@ -26,7 +26,7 @@ public class RequestService {
         request.setUser(liveUser);
         request.setCurrency(currency);
         request.setPercents(percentage);
-        
-        return request;
+
+        return repository.save(request);
     }
 }
