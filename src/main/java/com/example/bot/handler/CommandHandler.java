@@ -4,14 +4,12 @@ import com.example.command.Command;
 import com.example.command.CommandDetails;
 import com.example.command.SettingsCommand;
 import com.example.command.StartCommand;
-import com.example.entity.User;
 import com.example.exception.UnhandledCommandException;
 import com.example.util.TgUserToLiveUserMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import java.util.HashMap;

@@ -4,6 +4,8 @@ import com.example.entity.User;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+import java.util.Objects;
+
 import static com.example.command.CommandDetails.SETTINGS;
 
 @Component
@@ -19,18 +21,28 @@ public class SettingsCommand extends Command {
 
     private String buildMessage(User user) {
         StringBuilder message = new StringBuilder("Current settings:\n");
-        user.getRequests()
-                .forEach((request -> {
-                    message.append(String
-                            .format("""
-                                        Currency: %s
-                                        Percentage changed to notify: %.2f
-                                        Start time: %s
+        if (!Objects.isNull(user.getRequests()) && user.getRequests().size() > 0) {
+            user.getRequests()
+                    .forEach((request -> {
+                        message.append(String.format(
+                                            """
+                                                Currency: %s
+                                                Percentage changed to notify: %.2f
+                                                Start time: %s
                                         
-                                    """, request.getCurrency(), request.getPercents(), request.getTimeToStart().getTime()));
-                }));
-        message.append("You can adjust them");
-
+                                            """,
+                                        request.getCurrency(), request.getPercents(), request.getTimeToStart().getTime()
+                                ));
+                    }));
+            message.append("You can adjust them!");
+        } else {
+            message.append(
+                            """
+                            You have no any active observers.
+                            Please execute `/checkCurrency` to proceed.
+                            """
+            );
+        }
         return message.toString();
     }
 }
