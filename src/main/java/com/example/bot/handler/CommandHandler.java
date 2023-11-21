@@ -7,6 +7,7 @@ import com.example.command.SettingsCommand;
 import com.example.command.StartCommand;
 import com.example.entity.User;
 import com.example.exception.UnhandledCommandException;
+import com.example.util.TelegramUtil;
 import com.example.util.TgUserToLiveUserMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +38,9 @@ public class CommandHandler implements Handler {
 
     @Override
     public void handle(AbsSender sender, Message message) throws UnhandledCommandException {
-        CommandDetails command = retrieveCommandFromUpdate(message);
+        CommandDetails command = retrieveCommandFromMessage(message);
         User liveUser = TgUserToLiveUserMapper.mapToLiveUser(message.getFrom(), message.getChat());
+
         switch (command) {
             case START -> commands.get(CommandDetails.START)
                     .execute(sender, liveUser);
@@ -53,9 +55,9 @@ public class CommandHandler implements Handler {
         }
     }
 
-    private CommandDetails retrieveCommandFromUpdate(Message message) throws UnhandledCommandException {
+    private CommandDetails retrieveCommandFromMessage(Message message) throws UnhandledCommandException {
         try {
-            return Command.getByIdentifier(message.getText());
+            return TelegramUtil.getCommandByIdentifier(message.getText());
         } catch (IllegalArgumentException ex) {
             throw new UnhandledCommandException("Command " + message.getText() + " is not supported");
         }

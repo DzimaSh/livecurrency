@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CurrencyService {
@@ -15,7 +19,16 @@ public class CurrencyService {
     private final ParserService parserService;
 
     @Transactional
-    public Currency checkPrice(String currName) {
-        return new Currency();
+    public Currency updatePrice(String currSymbol) {
+        Currency fetchedCurrency = currencyCheckClient.getCryptoItem(currSymbol);
+        Optional<Currency> existingCurrency = repository.findBySymbol(currSymbol);
+
+        if (existingCurrency.isPresent() && !Objects.isNull(fetchedCurrency)) {
+            existingCurrency.get().setPrice(fetchedCurrency.getPrice());
+
+            return repository.save(existingCurrency.get());
+        } else {
+            return repository.save(fetchedCurrency);
+        }
     }
 }

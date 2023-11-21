@@ -39,7 +39,7 @@ public class SettingsCommand extends Command {
             message.append(
                             """
                             You have no any active observers.
-                            Please execute `/checkCurrency` to proceed.
+                            Please execute `/subscribe_currency` to proceed.
                             """
             );
         }

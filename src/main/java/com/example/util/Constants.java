@@ -21,4 +21,6 @@ public class Constants {
 
     public static final String COMMAND_KEY = "command";
     public static final String COMMAND_PREFIX = "/";
+
+    public static final String MESSAGE_KEY = "message";
 }

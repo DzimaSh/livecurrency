@@ -15,6 +15,10 @@ public class CheckCurrencyCommand extends Command {
 
     @Override
     public void execute(AbsSender sender, User user) {
-
+        sendAnswer(sender, user,
+                """
+                To check currency status just enter the currency symbol
+                For example: "APXUSDT"
+                """);
     }
 }
