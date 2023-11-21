@@ -39,10 +39,9 @@ public class SettingsCommand extends Command {
                                             """
                                                 Currency: %s
                                                 Percentage changed to notify: %.2f
-                                                Start time: %s
                                         
                                             """,
-                                        request.getCurrency(), request.getPercents(), request.getTimeToStart().getTime()
+                                        request.getCurrency(), request.getPercents()
                                 ));
                     }));
             message.append("You can adjust them!");

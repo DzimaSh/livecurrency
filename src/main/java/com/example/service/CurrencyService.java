@@ -37,7 +37,11 @@ public class CurrencyService {
 
     @Transactional(readOnly = true)
     public Currency getBySymbol(String symbol) {
-        return repository.findBySymbol(symbol)
+        return getOrFetch(symbol)
                 .orElseThrow(() -> new NotFoundException("Currency " + symbol + " not found!"));
+    }
+
+    private Optional<Currency> getOrFetch(String symbol) {
+        return repository.findBySymbol(symbol);
     }
 }

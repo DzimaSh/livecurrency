@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -25,9 +26,11 @@ public class Request extends BaseEntity {
     private Double initialPrice;
 
     @ManyToOne
+    @ToString.Exclude
     private User user;
 
     @ManyToOne
+    @ToString.Exclude
     private Currency currency;
 
     @PrePersist
