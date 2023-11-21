@@ -61,5 +61,7 @@ public class CurrencyService {
         log.info(String.format("Updated %d entities. Saved %d entities",
                 counter[0], (updatedCurrencyList.size() - counter[0]))
         );
+
+        // notifyAllSubscribers();
     }
 }
