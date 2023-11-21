@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.entity.Currency;
 import com.example.entity.Request;
 import com.example.entity.User;
 import com.example.repository.RequestRepository;
@@ -14,9 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class RequestService {
     private final RequestRepository repository;
     private final CurrencyService currencyService;
+    private final UserService userService;
 
     @Transactional
     public Request subscribe(User user, String currencySymbol, Double percentage) {
-        return new Request();
+        User liveUser = userService.getUserByUsername(user.getUserName());
+        Currency currency = currencyService.getBySymbol(currencySymbol);
+
+        Request request = new Request();
+        request.setUser(liveUser);
+        request.setCurrency(currency);
+        request.setPercents(percentage);
+        
+        return request;
     }
 }

@@ -26,7 +26,9 @@ public class SubscribeCurrencyCommand extends Command {
         if (userService.checkIfUserExists(user.prepareUserName())) {
             message = """
                 To subscribe currency just enter the currency symbol and the maximum percentage change
-                For example: "APXUSDT 0.5%"
+                For example: "APXUSDT 0.5"
+                
+                You'll be subscribed to APXUSDT currency and you'll be notified after 0.5% change
                 """;
         } else {
             message = """

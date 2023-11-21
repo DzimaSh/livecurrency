@@ -1,5 +1,7 @@
 package com.example.bot.handler;
 
+import com.example.entity.Request;
+import com.example.exception.NotFoundException;
 import com.example.exception.UnhandledException;
 import com.example.service.RequestService;
 import com.example.util.TelegramUtil;
@@ -39,8 +41,25 @@ public class SubscribeCurrencyHandler implements Handler {
                             message.getChatId()));
         }
 
-        requestService.subscribe(mapToLiveUser(message.getFrom(), message.getChat()),
-                parsedMessage[0],
-                Double.valueOf(parsedMessage[1]));
+        StringBuilder response = new StringBuilder();
+        try {
+            Request request = requestService.subscribe(mapToLiveUser(message.getFrom(), message.getChat()),
+                    parsedMessage[0],
+                    Double.valueOf(parsedMessage[1]));
+
+            response.append(String.format("""
+                    Prepared a subscription for currency %s.
+                    You'll be immediately notified after the price is changed more than %.2f%%!
+                    """, request.getCurrency().getSymbol(), request.getPercents()));
+        } catch (NotFoundException ex) {
+            response.append(ex.getMessage());
+        } catch (NumberFormatException ex) {
+            response.append("Invalid input: ")
+                    .append(ex.getMessage());
+        }
+
+
+        sender.execute(TelegramUtil
+                .buildMessage(response.toString(), message.getChatId()));
     }
 }
