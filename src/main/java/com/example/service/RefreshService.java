@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -57,6 +58,9 @@ public class RefreshService {
 
         currencies.forEach(currency -> {
             List<Request> requests = currency.getRequests();
+            if (Objects.isNull(requests) || requests.isEmpty()) {
+                return;
+            }
             requests.forEach(request -> {
                 double percentageChange = request.calculateSignedPercentageChange();
                 if (Math.abs(percentageChange) >= request.getPercents()) {
@@ -64,6 +68,8 @@ public class RefreshService {
                             "The currency %s has changed by %.5f%%",
                             request.getCurrency().getSymbol(), percentageChange)
                     );
+
+                    log.debug("Notify user" + request.getUser().getUserName());
                 }
             });
         });
