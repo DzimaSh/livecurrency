@@ -37,9 +37,10 @@ public class GetCurrencyPriceHandler implements Handler {
         sender.execute(TelegramUtil
                 .buildMessage(String.format(
                             """
-                            %s:
+                            Symbol: %s
                             Price: %.10f
-                            """, currency.getSymbol(), currency.getPrice()),
+                            TimeStamp: %s
+                            """, currency.getSymbol(), currency.getPrice(), currency.getCreationDate()),
                         message.getChatId()));
     }
 
