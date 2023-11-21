@@ -5,29 +5,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "request")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Request {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Request extends BaseEntity {
     private Double percents;
+
     private Date timeToStart;
 
     @ManyToOne
     private User user;
 
-    @OneToOne
+    @ManyToOne
     private Currency currency;
 }
