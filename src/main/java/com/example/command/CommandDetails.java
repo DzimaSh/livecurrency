@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum CommandDetails {
     SETTINGS("/settings", "Settings"),
     START("/start", "Start"),
-    CHECK_CURRENCY("/check_currency", "Check the price of given currency");
+    CHECK_CURRENCY("/check_currency", "Check the price of given currency"),
+    SUBSCRIBE_CURRENCY("/subscribe_currency", "Subscribe separate currency");
 
     private final String commandIdentifier;
     private final String commandDescription;

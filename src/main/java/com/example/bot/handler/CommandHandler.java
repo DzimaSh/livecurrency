@@ -51,6 +51,9 @@ public class CommandHandler implements Handler {
             case CHECK_CURRENCY -> commands.get(CommandDetails.CHECK_CURRENCY)
                     .execute(sender, liveUser);
 
+            case SUBSCRIBE_CURRENCY -> commands.get(CommandDetails.SUBSCRIBE_CURRENCY)
+                    .execute(sender, liveUser);
+
             default -> throw new UnhandledCommandException("Command " + message.getText() + " is not supported");
         }
     }
