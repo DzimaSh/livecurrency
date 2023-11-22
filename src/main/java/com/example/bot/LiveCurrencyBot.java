@@ -1,10 +1,9 @@
 package com.example.bot;
 
 import com.example.bot.handler.CommandHandler;
-import com.example.bot.handler.Handler;
 import com.example.bot.handler.GetCurrencyPriceHandler;
+import com.example.bot.handler.Handler;
 import com.example.bot.handler.SubscribeCurrencyHandler;
-import com.example.bot.util.BotActionConstants;
 import com.example.command.CommandDetails;
 import com.example.exception.UnhandledException;
 import com.example.util.Constants;
@@ -57,22 +56,23 @@ public class LiveCurrencyBot extends TelegramLongPollingBot {
         log.debug("Message received");
 
         try {
-            Long chatId = update.getMessage().getChatId();
+            Message message = update.getMessage();
+            Long chatId = message.getChatId();
 
             if (Objects.isNull(chatStatus.get(chatId))) {
                 chatStatus.put(chatId, Status.WAIT_FOR_COMMAND);
             }
 
-            String action = retrieveActionFromMessage(update.getMessage(), update.getMessage().getChatId());
+            String action = retrieveActionFromMessage(message, chatId);
 
             if (Objects.isNull(action)) {
                 this.execute(TelegramUtil
                         .buildMessage("Unsupported request! Try `/help` for further info", chatId));
             } else {
-                handlerList.get(action).handle(this, update.getMessage());
+                handlerList.get(action).handle(this, message);
+                updateChatStatus(action, message, chatId);
             }
 
-            chatStatus.put(chatId, Status.WAIT_FOR_COMMAND);
         } catch (TelegramApiException e) {
             log.error("External Telegram exception!");
             log.error(e.getMessage());
@@ -84,11 +84,6 @@ public class LiveCurrencyBot extends TelegramLongPollingBot {
 
     private String retrieveActionFromMessage(Message message, Long chatId) throws TelegramApiException {
         if (message.getText().startsWith(COMMAND_PREFIX)) {
-            CommandDetails command = TelegramUtil.getCommandByIdentifier(message.getText());
-            switch (Objects.requireNonNull(command)) {
-                case CHECK_CURRENCY -> chatStatus.put(chatId, Status.WAIT_FOR_CURRENCY_SYMBOL);
-                case SUBSCRIBE_CURRENCY -> chatStatus.put(chatId, Status.WAIT_FOR_CURRENCY_SUBSCRIBE);
-            }
             return COMMAND_KEY;
         } else if (chatStatus.get(chatId).equals(Status.WAIT_FOR_CURRENCY_SYMBOL)) {
             return CURRENCY_PRICE_MESSAGE_KEY;
@@ -96,6 +91,19 @@ public class LiveCurrencyBot extends TelegramLongPollingBot {
             return CURRENCY_SUBSCRIBE_MESSAGE_KEY;
         }
         return null;
+    }
+
+    private void updateChatStatus(String action, Message message, Long chatId) {
+        if (action.contains(COMMAND_KEY)) {
+            CommandDetails command = TelegramUtil.getCommandByIdentifier(message.getText());
+            switch (Objects.requireNonNull(command)) {
+                case CHECK_CURRENCY -> chatStatus.put(chatId, Status.WAIT_FOR_CURRENCY_SYMBOL);
+                case SUBSCRIBE_CURRENCY -> chatStatus.put(chatId, Status.WAIT_FOR_CURRENCY_SUBSCRIBE);
+                default -> chatStatus.put(chatId, Status.WAIT_FOR_COMMAND);
+            }
+        } else {
+            chatStatus.put(chatId, Status.WAIT_FOR_COMMAND);
+        }
     }
 
     @AllArgsConstructor
