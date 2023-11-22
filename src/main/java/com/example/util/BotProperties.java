@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 @Slf4j
-public class Constants {
+public class BotProperties {
 
     @Value("${telegram.bot.token}")
     private String botToken;
