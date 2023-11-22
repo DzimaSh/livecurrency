@@ -21,10 +21,4 @@ public class Constants {
 
     @Value("${telegram.bot.update_delay_in_ms}")
     private String updateDelayInMs;
-
-    public static final String COMMAND_KEY = "command";
-    public static final String COMMAND_PREFIX = "/";
-
-    public static final String CURRENCY_PRICE_MESSAGE_KEY = "currency_price_message";
-    public static final String CURRENCY_SUBSCRIBE_MESSAGE_KEY = "currency_subscribe_message";
 }

@@ -5,6 +5,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.Locale;
 
+import static com.example.bot.util.BotActionConstants.COMMAND_PREFIX;
+
 public class TelegramUtil {
     public static SendMessage buildMessage(String text, Long chatId) {
         SendMessage message = SendMessage.builder()
@@ -20,7 +22,7 @@ public class TelegramUtil {
         if (options.length > 0) {
             return CommandDetails.valueOf(options[0]
                     .toUpperCase(Locale.ROOT)
-                    .replace(Constants.COMMAND_PREFIX, ""));
+                    .replace(COMMAND_PREFIX, ""));
         }
         return null;
     }

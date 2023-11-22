@@ -39,13 +39,4 @@ public class Request extends BaseEntity {
             this.initialPrice = this.currency.getPrice();
         }
     }
-
-    public Double calculateSignedPercentageChange() {
-        if (this.initialPrice == null || this.currency == null || this.currency.getPrice() == null) {
-            throw new IllegalStateException("Initial price or current price is null");
-        }
-
-        return ((this.currency.getPrice() - this.initialPrice) / this.initialPrice) * 100;
-    }
-
 }

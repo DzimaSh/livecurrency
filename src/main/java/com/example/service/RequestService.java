@@ -29,4 +29,15 @@ public class RequestService {
 
         return repository.save(request);
     }
+
+
+    public Double calculateSignedPercentageChange(Request request) {
+        if (request.getInitialPrice() == null ||
+                request.getCurrency() == null ||
+                request.getCurrency().getPrice() == null) {
+            throw new IllegalStateException("Initial price or current price is null");
+        }
+
+        return ((request.getCurrency().getPrice() - request.getInitialPrice()) / request.getInitialPrice()) * 100;
+    }
 }
