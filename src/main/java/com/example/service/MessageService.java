@@ -30,12 +30,4 @@ public class MessageService {
             log.error(e.getLocalizedMessage());
         }
     }
-
-//    private Command getCommandByIdentifier(String identifier) throws UnhandledCommandException {
-//        Command command = commands.get(identifier);
-//        if (Objects.isNull(command)) {
-//            throw new UnhandledCommandException("Command " + identifier + " is not supported");
-//        }
-//        return command;
-//    }
 }

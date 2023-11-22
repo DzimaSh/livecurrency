@@ -22,6 +22,7 @@ public class RefreshService {
     private final CurrencyRepository repository;
     private final ParserService parserService;
     private final MessageService messageService;
+    private final RequestService requestService;
 
     @Transactional
     @Scheduled(fixedDelayString = "${telegram.bot.update_delay_in_ms}")
@@ -62,7 +63,7 @@ public class RefreshService {
                 return;
             }
             requests.forEach(request -> {
-                double percentageChange = request.calculateSignedPercentageChange();
+                double percentageChange = requestService.calculateSignedPercentageChange(request);
                 if (Math.abs(percentageChange) >= request.getPercents()) {
                     messageService.sendMessage(request.getUser(), String.format(
                             "The currency %s has changed by %.5f%%",

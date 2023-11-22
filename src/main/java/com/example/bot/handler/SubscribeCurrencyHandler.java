@@ -23,7 +23,7 @@ public class SubscribeCurrencyHandler implements Handler {
     private final RequestService requestService;
 
     @Override
-    public void handle(AbsSender sender, Message message) throws UnhandledException, TelegramApiException {
+    public void handle(AbsSender sender, Message message) throws TelegramApiException {
         String[] parsedMessage = message.getText().trim().split(" ");
         if (parsedMessage.length == 0) {
             sender.execute(TelegramUtil

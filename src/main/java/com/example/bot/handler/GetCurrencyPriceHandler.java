@@ -19,7 +19,7 @@ public class GetCurrencyPriceHandler implements Handler {
     private final CurrencyService currencyService;
 
     @Override
-    public void handle(AbsSender sender, Message message) throws UnhandledException, TelegramApiException {
+    public void handle(AbsSender sender, Message message) throws TelegramApiException {
         String[] parsedMessage = message.getText().trim().split(" ");
         if (parsedMessage.length == 0) {
             sender.execute(TelegramUtil

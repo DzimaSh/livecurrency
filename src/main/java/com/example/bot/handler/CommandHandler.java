@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -34,8 +35,10 @@ public class CommandHandler implements Handler {
 
     @PostConstruct
     private void init() {
-        if (commands.size() > 0)
+        if (commands.size() > 0) {
             log.info("Commands initialized");
+            log.info("Handled commands list: " + commands.keySet());
+        }
     }
 
     @Override
@@ -43,21 +46,11 @@ public class CommandHandler implements Handler {
         CommandDetails command = retrieveCommandFromMessage(message);
         User liveUser = TgUserToLiveUserMapper.mapToLiveUser(message.getFrom(), message.getChat());
 
-        switch (command) {
-            case START -> commands.get(CommandDetails.START)
-                    .execute(sender, liveUser);
-
-            case SETTINGS -> commands.get(CommandDetails.SETTINGS)
-                    .execute(sender, liveUser);
-
-            case CHECK_CURRENCY -> commands.get(CommandDetails.CHECK_CURRENCY)
-                    .execute(sender, liveUser);
-
-            case SUBSCRIBE_CURRENCY -> commands.get(CommandDetails.SUBSCRIBE_CURRENCY)
-                    .execute(sender, liveUser);
-
-            default -> throw new UnhandledCommandException("Command " + message.getText() + " is not supported");
+        if (Objects.isNull(command)) {
+            throw new UnhandledCommandException("Command " + message.getText() + " is not supported");
         }
+
+        commands.get(command).execute(sender, liveUser);
     }
 
     private CommandDetails retrieveCommandFromMessage(Message message) throws UnhandledCommandException {
