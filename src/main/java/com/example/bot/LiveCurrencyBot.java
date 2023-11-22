@@ -6,7 +6,7 @@ import com.example.bot.handler.Handler;
 import com.example.bot.handler.SubscribeCurrencyHandler;
 import com.example.command.CommandDetails;
 import com.example.exception.UnhandledException;
-import com.example.util.Constants;
+import com.example.util.BotProperties;
 import com.example.util.TelegramUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,15 +30,15 @@ import static com.example.bot.util.BotActionConstants.CURRENCY_SUBSCRIBE_MESSAGE
 @Component
 public class LiveCurrencyBot extends TelegramLongPollingBot {
 
-    private final Constants constants;
+    private final BotProperties botProperties;
     private final Map<String, Handler> handlerList = new HashMap<>();
     private final Map<Long, Status> chatStatus = new ConcurrentHashMap<>();
 
-    public LiveCurrencyBot(Constants constants,
+    public LiveCurrencyBot(BotProperties botProperties,
                            CommandHandler commandHandler, GetCurrencyPriceHandler currencyPriceHandler,
                            SubscribeCurrencyHandler subscribeCurrencyHandler) {
-        super(constants.getBotToken());
-        this.constants = constants;
+        super(botProperties.getBotToken());
+        this.botProperties = botProperties;
 
         handlerList.put(COMMAND_KEY, commandHandler);
         handlerList.put(CURRENCY_PRICE_MESSAGE_KEY, currencyPriceHandler);
@@ -48,7 +48,7 @@ public class LiveCurrencyBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return constants.getBotUsername();
+        return botProperties.getBotUsername();
     }
 
     @Override

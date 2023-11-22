@@ -4,7 +4,7 @@ import com.example.entity.User;
 import com.example.exception.MaximumUsersReachedException;
 import com.example.exception.NotFoundException;
 import com.example.repository.UserRepository;
-import com.example.util.Constants;
+import com.example.util.BotProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -18,14 +18,14 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final Constants constants;
+    private final BotProperties botProperties;
     private final AtomicLong userCounter = new AtomicLong();
     private final UserRepository userRepository;
 
     @PostConstruct
     private void init() {
         long usersAmount = getUsersAmount();
-        userCounter.set(constants.getMaxUsers() - usersAmount);
+        userCounter.set(botProperties.getMaxUsers() - usersAmount);
     }
 
     @Transactional
