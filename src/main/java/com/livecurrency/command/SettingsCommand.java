@@ -4,8 +4,10 @@ import com.livecurrency.entity.User;
 import com.livecurrency.exception.NotFoundException;
 import com.livecurrency.service.UserService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+import java.util.Collections;
 import java.util.Objects;
 
 import static com.livecurrency.command.CommandDetails.SETTINGS;
@@ -32,7 +34,7 @@ public class SettingsCommand extends Command {
 
     private String buildMessage(User user) {
         final StringBuilder message = new StringBuilder("Current settings:\n");
-        if (!Objects.isNull(user.getRequests()) && !user.getRequests().isEmpty()) {
+        if (!CollectionUtils.isEmpty(user.getRequests())) {
             user.getRequests()
                     .forEach((request -> {
                         message.append(String.format(

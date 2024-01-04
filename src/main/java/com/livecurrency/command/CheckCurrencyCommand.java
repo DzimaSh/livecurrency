@@ -9,16 +9,18 @@ import static com.livecurrency.command.CommandDetails.CHECK_CURRENCY;
 @Component
 public class CheckCurrencyCommand extends Command {
 
+    private static final String RESPONSE =
+                """
+                To check currency status just enter the currency symbol
+                For example: "APXUSDT"
+                """;
+
     public CheckCurrencyCommand() {
         super(CHECK_CURRENCY.getCommandIdentifier(), CHECK_CURRENCY.getCommandDescription());
     }
 
     @Override
     public void execute(AbsSender sender, User user) {
-        sendAnswer(sender, user,
-                """
-                To check currency status just enter the currency symbol
-                For example: "APXUSDT"
-                """);
+        sendAnswer(sender, user, RESPONSE);
     }
 }
