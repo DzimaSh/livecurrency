@@ -75,9 +75,9 @@ public class LiveCurrencyBot extends TelegramLongPollingBot {
             }
 
         } catch (TelegramApiException | NullPointerException e) {
-            log.error("External Telegram exception!");
+            log.error("External Telegram exception: " + e.getMessage());
         } catch (UnhandledException e) {
-            log.error("Unhandled message received!");
+            log.error("Unhandled message received: " + e.getMessage());
         }
     }
 

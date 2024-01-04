@@ -27,7 +27,7 @@ public class MessageService {
         try {
             absSender.execute(message);
         } catch (TelegramApiException e) {
-            log.error("External Telegram error: " + e.getLocalizedMessage());
+            log.error("External Telegram error: " + e.getMessage());
         }
     }
 }

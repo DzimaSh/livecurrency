@@ -21,7 +21,7 @@ public abstract class Command extends BotCommand {
         try {
             absSender.execute(message);
         } catch (TelegramApiException e) {
-            log.error(e.getLocalizedMessage());
+            log.error("External Telegram error: " + e.getMessage());
         }
     }
 
